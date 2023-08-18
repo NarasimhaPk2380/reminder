@@ -31,7 +31,7 @@ require('./user');
 
 const User = mongoose.model('User');
 
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, 'demo/index.html'))
 })
 
