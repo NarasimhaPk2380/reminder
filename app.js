@@ -116,6 +116,7 @@ app.post("/sendMessages", async (req, res) => {
       success: true
     });
   } catch (e) {
+    console.log(e);
     return res.json({
       msg: e?.message || 'Failed to send messages',
       success: false
