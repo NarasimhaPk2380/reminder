@@ -20,8 +20,8 @@ app.use(express.static(path.join(__dirname, 'demo')));
 
 
 
-const accountSid = "AC26a72ae53ed185e53918b28974ac72ce";
-const authToken = "d6b36f8c2c55d660b8f0492d5df792f8";
+const accountSid = process.env.accountSid;
+const authToken = process.env.authToken;
 const client = require('twilio')(accountSid, authToken);
 
 mongoose.connect('mongodb+srv://durga:durga123@twilio.vlwstma.mongodb.net/?retryWrites=true&w=majority')
@@ -100,14 +100,12 @@ app.delete("/users/:userId", async (req, res) => {
 
 app.post("/sendMessages", async (req, res) => {
   try {
-    console.log(accountSid);
-    console.log(authToken);
     const { usersList } = req.body;
     for (const user of usersList) {
       if (!user?.daysLeft) {
         continue;
       }
-      const { sid } = await client.messages.create({ body: utils.message(user), from: "+18787896654", to: `+91${user?.phoneNumber}` })
+      const { sid } = await client.messages.create({ body: utils.message(user), from: process.env.fromPhone, to: `+91${user?.phoneNumber}` })
       if (sid) {
         await User.findByIdAndUpdate(user.userId, { daysLeft: user?.daysLeft - 1 ?? 0 })
       }
@@ -116,7 +114,6 @@ app.post("/sendMessages", async (req, res) => {
       success: true
     });
   } catch (e) {
-    console.log(e);
     return res.json({
       msg: e?.message || 'Failed to send messages',
       success: false
