@@ -100,6 +100,8 @@ app.delete("/users/:userId", async (req, res) => {
 
 app.post("/sendMessages", async (req, res) => {
   try {
+    console.log(accountSid);
+    console.log(authToken);
     const { usersList } = req.body;
     for (const user of usersList) {
       if (!user?.daysLeft) {
