@@ -43,6 +43,9 @@ SEE LICENSE IN LICENSE.md
 @progress/kendo-angular-icons
 SEE LICENSE IN LICENSE.md
 
+@progress/kendo-angular-indicators
+SEE LICENSE IN LICENSE.md
+
 @progress/kendo-angular-inputs
 SEE LICENSE IN LICENSE.md
 
