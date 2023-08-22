@@ -18,8 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'demo')));
 
-
-
 const accountSid = process.env.accountSid;
 const authToken = process.env.authToken;
 const client = require('twilio')(accountSid, authToken);
@@ -37,6 +35,7 @@ app.get("/", (req, res) => {
 
 app.get("/users", async (req, res) => {
   try {
+    console.log(req.headers.host);
     const users = await User?.find({});
     res.json({
       users,
@@ -105,7 +104,7 @@ app.post("/sendMessages", async (req, res) => {
       if (!user?.daysLeft) {
         continue;
       }
-      const { sid } = await client.messages.create({ body: utils.message(user), from: process.env.fromPhone, to: `+91${user?.phoneNumber}` })
+      const { sid } = await client.messages.create({ body: utils.message(user, req?.headers?.host), from: process.env.fromPhone, to: `+91${user?.phoneNumber}` })
       if (sid) {
         await User.findByIdAndUpdate(user.userId, { daysLeft: user?.daysLeft - 1 ?? 0 })
       }
